@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const apiRoute = require('./routes/config')
+const loginRoute = require('./routes/login')
 // setup routes for api
 
 var app = express();
@@ -22,5 +23,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRoute)
+app.use('/login', loginRoute)
 
+const db = require("./models")
+
+db.mongoose.connect(`mongodb://${process.env.HOST}:${process.env.DB_PORT}/${process.env.DB}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+}).then(() => {
+    console.log("Successfully connect to MongoDB.");
+}).catch(err => {
+    console.error("Connection error", err);
+    process.exit();
+});
 module.exports = app;
