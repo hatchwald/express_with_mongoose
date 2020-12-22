@@ -1,6 +1,7 @@
 import express from "express"
 const router = express.Router()
 const db = require("../models")
+import jwt from "jsonwebtoken"
 const UserData = db.user;
 
 router.get("/", (req, res) => {
@@ -17,13 +18,21 @@ router.get("/", (req, res) => {
 
     UserData.findOne({ username: form_data.username }, (err, user) => {
         if (err) throw err;
-        console.log(user);
+        // console.log(user);
 
         user.comparePassword(form_data.password, function (err, isMatch) {
             if (err) throw err;
             // console.log(form_data.password);
             if (isMatch) {
-                return res.status(200).json({ message: "success Login" })
+                const token = jwt.sign({ id: form_data.username }, process.env.SECRET, {
+                    expiresIn: 86400
+                })
+
+                return res.status(200).json({
+                    message: "success Login",
+                    username: form_data.username,
+                    token: token
+                })
             } else {
                 return res.status(400).json({ message: "Failed login , User / Password not match" })
             }
