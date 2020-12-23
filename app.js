@@ -7,7 +7,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const apiRoute = require('./routes/config')
+// const apiRoute = require('./routes/config')
 const loginRoute = require('./routes/login')
 // setup routes for api
 
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/api', apiRoute)
+require("./routes/config")(app)
 app.use('/login', loginRoute)
 
 const db = require("./models")
