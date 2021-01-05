@@ -15,4 +15,5 @@ ApiRouter.all('/*', (req, res, next) => {
     next()
 })
 ApiRouter.use("/login", require("./login"));
+ApiRouter.use("/blog", require("./blog"));
 module.exports = ApiRouter;
