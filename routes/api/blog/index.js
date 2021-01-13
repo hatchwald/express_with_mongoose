@@ -75,6 +75,24 @@ router.get("/", function (req, res) {
         }
     })
 
+}).delete("/:blogId", (req, res) => {
+    const param = req.params
+    const id = param.blogId
+    blogData.findOne({ id_blog: id }, (err, doc) => {
+        if (doc == null) {
+            res.status(404).json({ message: "Data not found !" })
+        } else {
+            blogData.deleteOne({ id_blog: id }, err => {
+                if (err) {
+                    res.status(500).send(err)
+                } else {
+                    res.status(200).json({ message: "Blog data has been deleted!" })
+                }
+
+            })
+        }
+    })
+
 })
 
 module.exports = router;
