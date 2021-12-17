@@ -9,7 +9,8 @@ router.get("/", function (req, res) {
     let arr_data = [];
     blogData.find({}, (err, doc) => {
         doc.forEach(element => {
-            arr_data.push({ title: element.title, date: element.date, author: element.author })
+            const date_now = new Date(element.posting_date)
+            arr_data.push({ title: element.title, date: date_now.toDateString(), author: element.author })
         });
         res.status(200).json({ message: arr_data })
     })
