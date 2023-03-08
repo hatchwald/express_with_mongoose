@@ -5,12 +5,17 @@ const blogData = db.blog;
 const router = express.Router()
 
 router.get("/", function (req, res) {
-    // res.send("blog list")
     let arr_data = [];
     blogData.find({}, (err, doc) => {
         doc.forEach(element => {
             const date_now = new Date(element.posting_date)
-            arr_data.push({ title: element.title, date: date_now.toDateString(), author: element.author })
+            arr_data.push({ 
+                id:element.id_blog,
+                title: element.title, 
+                date: date_now.toISOString(), 
+                author: element.author,blog: element.body,
+                modified: date_now.toISOString()
+            })
         });
         res.status(200).json({ message: arr_data })
     })
@@ -35,7 +40,7 @@ router.get("/", function (req, res) {
         if (err) {
             res.status(500).send(err)
         } else {
-            res.status(200).json({ message: "success created Blog" })
+            res.status(200).json({ message: "success created Blog" ,data:new_blog})
         }
     })
 
@@ -63,7 +68,7 @@ router.get("/", function (req, res) {
             doc.title = form_data.title;
             doc.body = form_data.blog;
             const date_now = new Date();
-            doc.date_modified = date_now.toISOString();
+            doc.modified = date_now.toISOString();
 
             doc.save((err, new_data) => {
                 if (err) {
