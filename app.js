@@ -41,7 +41,12 @@ app.use('/login', loginRoute)
 
 const db = require("./models")
 
-db.mongoose.connect(`mongodb://${process.env.HOST}:${process.env.DB_PORT}/${process.env.DB}`, {
+let mongo_uri = `mongodb+srv://${process.env.HOST}:${process.env.DB_PORT}/${process.env.DB}`
+if (process.env.NODE_ENV = "dev") {
+    mongo_uri = `mongodb://${process.env.HOST}:${process.env.DB_PORT}/${process.env.DB}`
+}
+
+db.mongoose.connect(mongo_uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
